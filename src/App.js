@@ -50,6 +50,7 @@ class SimpleForm extends Component {
                 firstName: '',
                 lastName: '',
                 email: '',
+                selectedHobbies: ''
             },
             selectedHobbies: [],
         };
@@ -86,16 +87,20 @@ class SimpleForm extends Component {
         this.setState({
             errors, [name]: value,
         });
+
+        this.setState({formValid: validateForm(this.state.errors)});
+        this.setState({errorCount: countErrors(this.state.errors)});
     }
 
     handleHobbiesChange = (newValue) => {
+        let errors = this.state.errors;
+        if (newValue !== null) {
+            errors.selectedHobbies =
+                newValue.length < 1
+                    ? 'You must select at least one hobby.'
+                    : '';
+        }
         this.setState({selectedHobbies: newValue})
-    }
-
-    handleSubmit = (event) => {
-        event.preventDefault();
-        this.setState({formValid: validateForm(this.state.errors)});
-        this.setState({errorCount: countErrors(this.state.errors)});
     }
 
     render() {
@@ -103,40 +108,39 @@ class SimpleForm extends Component {
         return (
             <div className={`row`}>
                 <div className={`col-md-3 wrapper-right`}>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className='firstName'>
-                            <label htmlFor="firstName">First Name</label>
-                            <input className={`form-control `} type='text' name='firstName' defaultValue={this.state.firstName} onChange={this.handleChange}/>
-                            {errors.firstName.length > 0 &&
-                            <span className={`alert-danger`}>{errors.firstName}</span>}
-                        </div>
-                        <div className='lastName'>
-                            <label htmlFor="lastName">Last Name</label>
-                            <input className={`form-control `} type='text' name='lastName' defaultValue={this.state.lastName} onChange={this.handleChange}/>
-                            {errors.lastName.length > 0 &&
-                            <span className={`alert-danger`}>{errors.lastName}</span>}
-                        </div>
-                        <div className='email'>
-                            <label htmlFor="email">Email</label>
-                            <input className={`form-control `} type='email' name='email' defaultValue={this.state.email} onChange={this.handleChange}/>
-                            {errors.email.length > 0 &&
-                            <span className={`alert-danger`}>{errors.email}</span>}
-                        </div>
-                        <div className={`hobbies`}>
-                            <label htmlFor="hobbies">Hobbies</label>
-                            <CreatableSelect
-                                isMulti
-                                options={this.state.hobbies}
-                                onChange={this.handleHobbiesChange}
-                            />
-                            <span className={`alert-danger`}>{errors.password}</span>
-                        </div>
-                        <button className={`btn btn-primary`}>Create</button>
-                    </form>
+                    <h3 className='text-center'>Form Input</h3>
+                    <div className='firstName'>
+                        <label htmlFor="firstName">First Name</label>
+                        <input className={`form-control`} type='text' name='firstName' defaultValue={this.state.firstName} onChange={this.handleChange} noValidate/>
+                        {errors.firstName.length > 0 &&
+                        <span className={`alert-danger`}>{errors.firstName}</span>}
+                    </div>
+                    <div className='lastName'>
+                        <label htmlFor="lastName">Last Name</label>
+                        <input className={`form-control `} type='text' name='lastName' defaultValue={this.state.lastName} onChange={this.handleChange} noValidate/>
+                        {errors.lastName.length > 0 &&
+                        <span className={`alert-danger`}>{errors.lastName}</span>}
+                    </div>
+                    <div className='email'>
+                        <label htmlFor="email">Email</label>
+                        <input className={`form-control `} type='email' name='email' defaultValue={this.state.email} onChange={this.handleChange} noValidate/>
+                        {errors.email.length > 0 &&
+                        <span className={`alert-danger`}>{errors.email}</span>}
+                    </div>
+                    <div className={`hobbies`}>
+                        <label htmlFor="hobbies">Hobbies</label>
+                        <CreatableSelect
+                            isMulti
+                            options={this.state.hobbies}
+                            onChange={this.handleHobbiesChange}
+                        />
+                        <span className={`alert-danger`}>{errors.password}</span>
+                    </div>
                 </div>
                 <div className={`col-md-3 wrapper-left`}>
                     <div className={`vl`}>
                         <div className={`results`}>
+                            <h3 className='text-center'>Result</h3>
                             {
                                 this.state.errorCount !== null
                                     ?
@@ -144,21 +148,21 @@ class SimpleForm extends Component {
                                         {
                                             formValid
                                             ?
-                                                firstName.length > 0 && lastName.length > 0 && email.length > 0 && this.state.selectedHobbies.length > 0
+                                                firstName.length > 0 && lastName.length > 0 && email.length > 0 && (selectedHobbies !== null && selectedHobbies.length > 0)
                                                 ?
                                                     <div>
                                                         <p>First Name: {firstName}</p>
                                                         <p>Last Name: {lastName}</p>
                                                         <p>Email: {email}</p>
                                                         <p>Selected hobbies:</p>
-                                                        <SelectedHobbies hobbies={selectedHobbies} />
+                                                        <SelectedHobbies items={selectedHobbies} />
                                                     </div>
                                                 : 'One or more fields are empty.'
 
-                                            : 'Submit is invalid. Check your errors.'
+                                            : 'Invalid input. Check your errors.'
                                         }
                                     </p>
-                                : 'Form not submitted.'
+                                : ''
                             }
                         </div>
                     </div>
@@ -172,7 +176,7 @@ class SelectedHobbies extends React.Component {
     render() {
         return (
             <ul>
-                {this.props.hobbies.map(item => (
+                {this.props.items.map(item => (
                     <li>{item.label}</li>
                 ))}
             </ul>
