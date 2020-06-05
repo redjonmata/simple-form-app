@@ -1,38 +1,47 @@
-.App {
-  text-align: center;
+p, div {
+    font-family: Lato;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/*
+  Colors:
+  https://coolors.co/22223b-4a4e69-eadae4-9a8c98-c9ada7
+*/
+/*
+YANKEES BLUE: #22223B
+INDEPENDENCE: #4A4E69
+PLATINUM: #EADAE4
+SPANISH GRAY: #9A8C98
+SILVER PINK: #C9ADA7
+*/
+
+.wrapper-right {
+    margin-left: 20% !important;
+    margin-top: 5% !important;
+    height: 25%;
+}
+.wrapper-left {
+    margin-top: 5% !important;
+    height: 25%;
+}
+.vl {
+    border-left: 1px solid black;
+    height: 320px;
+}
+.results {
+    margin-left: 10%;
+}
+.firstName,
+.lastName,
+.email,
+.hobbies {
+    margin-bottom: 15px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.firstName {
+    width: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.email,
+.hobbies {
+    width: 100%;
 }
